@@ -2,7 +2,7 @@
 
 namespace TermProject.Controllers
 {
-    public class PlayerController : Controller
+    public class UserController : Controller
     {
         public IActionResult Index()
         {
