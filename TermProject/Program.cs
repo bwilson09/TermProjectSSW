@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using TermProject.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//adding in the DbContext
+builder.Services.AddDbContext<TournamentDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("TournamentDb"))
+);
 
 var app = builder.Build();
 
