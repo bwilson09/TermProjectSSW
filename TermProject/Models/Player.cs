@@ -2,8 +2,8 @@
 {
     public class Player
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int PlayerId { get; set; }
+        public string PlayerName { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
         public string Email { get; set; }
