@@ -6,8 +6,8 @@
         public string TeamName  { get; set; }
         public string Division { get; set; }
         public bool RegistrationPaid { get; set; }
-        //DateOnly or DateTime??
-        public DateOnly PaymentDate { get; set; }
+       
+        public DateTime PaymentDate { get; set; }
 
         public Team() { }
     }

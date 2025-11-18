@@ -1,4 +1,5 @@
-﻿
+﻿@using TermProject.ViewModels
+@model IEnumerable<TeamVm>
 
 @*header here with background photo*@
 
@@ -35,5 +36,41 @@
 	Use the User View Model for this?
 	Have another Vm for the register page?
 *@
+
+@{
+	//adding photos to an array to flip through in the card image section
+	var photos = new[] { "/images/bowling1.jpg", "/images/bowling2.jpg", "/images/bowling3.jpg" };
+	//setting the start index of the array to 0
+	int index = 0;
+
+}
+
+<div class="team-scroll">
+	@*looping through all the teams from the vm*@
+	@foreach(var team in Model)
+	{
+		//setting up the card layout with bootstrap
+		<div class="col-md-3 d-flex align-items-sm-stretch">
+			<div class="card">
+				<!-- referencing the photos array here and setting the photo using modulus the cycle through all 3 images and setting that photo for the card-->
+				<img src="@photos[index % photos.Length]" class="card-img-top h-50" />
+				<div class="card-body">
+					<!--show the team name first and then their division-->
+					<h5 class="card-title text-center">@team.TeamName</h5>
+					<p class="card-text text-center">Division: @team.Division</p>
+					<ul>
+						<!--looping through the team players and adding their name to a list-->
+						@foreach(var p in team.Players)
+						{
+							<li>@p</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+		//increasing the index here for the photos to get the next photo and help with the looping through all 3 images
+		index++;
+	}
+</div>
 
 

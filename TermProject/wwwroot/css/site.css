@@ -32,3 +32,15 @@ body {
     position: relative;
 
 }
+
+.team-scroll {
+    display: flex;
+    overflow-x: auto; 
+    gap: 1rem; 
+    padding: 1rem;
+}
+
+    .team-scroll .card {
+        flex: 0 0 auto;
+        width: 250px; 
+    }
