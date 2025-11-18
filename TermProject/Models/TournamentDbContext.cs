@@ -13,14 +13,14 @@ namespace TermProject.Models
 
         public DbSet<Player> Player => Set<Player>();
 
-        public DbSet<User> User => Set<User>();
+        public DbSet<BowlingUser> BowlingUser => Set<BowlingUser>();
 
         //force singular table name?? - again double check db names
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Team>().ToTable("Team");
             modelBuilder.Entity<Player>().ToTable("Player");
-            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<BowlingUser>().ToTable("BowlingUser");
         }
     }
 }
