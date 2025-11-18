@@ -11,6 +11,20 @@ builder.Services.AddDbContext<TournamentDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TournamentDb"))
 );
 
+
+//For login: Add authentication and Authorization services
+builder.Services.AddAuthentication("app-cookie")
+    .AddCookie("app-cookie", options =>
+    {
+        options.LoginPath = "/Auth/Index";
+        options.LogoutPath = "/Auth/Logout";
+        options.AccessDeniedPath = "/Auth/Denied";
+    });
+
+builder.Services.AddAuthorization();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
