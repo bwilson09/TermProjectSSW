@@ -15,6 +15,11 @@ namespace TermProject.Models
 
         public DbSet<BowlingUser> BowlingUser => Set<BowlingUser>();
 
+
+
+        //for dropdown???? commenting out for now 
+        //public DbSet<Division> Division => Set<Division>();
+
         //force singular table name?? - again double check db names
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
