@@ -4,6 +4,8 @@ namespace TermProject.ViewModels
 {
     public class TeamVm
     {
+
+        public int Id { get; set; }
         [Required]
         public string TeamName { get; set; }
         [Required]

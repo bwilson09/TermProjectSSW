@@ -66,7 +66,7 @@
 						}
 					</ul>
 					@*link button to take user to see more team details*@
-					<a asp-page="/TeamDetails" class="btn btn-sm btn-secondary align-items-sm-center">View Team Details</a>
+					<a asp-controller="Tournament" asp-action="TeamDetails" asp-route-id="@team.Id" class="btn btn-sm btn-secondary">View Team Details</a>
 				</div>
 			</div>
 		</div>

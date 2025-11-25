@@ -37,5 +37,10 @@ namespace TermProject.Controllers
         {
             return View();
         }
+
+        public IActionResult TeamDetails(int id)
+        {
+            return View();
+        }
     }
 }
