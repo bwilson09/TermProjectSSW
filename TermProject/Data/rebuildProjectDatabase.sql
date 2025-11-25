@@ -3,6 +3,7 @@ BEGIN TRANSACTION;
 -- Start clean
 DROP TABLE IF EXISTS Player;
 DROP TABLE IF EXISTS Team;
+DROP TABLE IF EXISTS Division;
 DROP TABLE IF EXISTS BowlingUser;
 
 CREATE TABLE BowlingUser (
@@ -12,79 +13,95 @@ CREATE TABLE BowlingUser (
     IsAdmin INTEGER NOT NULL CHECK (IsAdmin IN (0,1))
 );
 
+CREATE TABLE Division (
+    DivisionId INTEGER PRIMARY KEY,
+    DivisionName TEXT NOT NULL UNIQUE
+);
+
 CREATE TABLE Team (
     TeamId INTEGER PRIMARY KEY,
     TeamName TEXT NOT NULL,
-    Division TEXT NOT NULL,
+    DivisionId INTEGER NOT NULL,
     RegistrationPaid INTEGER NOT NULL CHECK (RegistrationPaid IN (0,1)),
-    PaymentDate TEXT
+    PaymentDate TEXT,
+    FOREIGN KEY (DivisionId) REFERENCES Division(DivisionId),
+    CHECK (
+        (RegistrationPaid = 1 AND PaymentDate IS NOT NULL) OR
+        (RegistrationPaid = 0 AND PaymentDate IS NULL)
+    )
 );
-
 CREATE TABLE Player (
     PlayerId INTEGER PRIMARY KEY,
-    TeamId INTEGER NOT NULL REFERENCES Team(TeamId),
+    TeamId INTEGER NOT NULL,
     PlayerName TEXT NOT NULL,
     City TEXT NOT NULL,
     Province TEXT NOT NULL,
     Email TEXT NOT NULL,
-    Phone TEXT NOT NULL
+    Phone TEXT NOT NULL,
+    FOREIGN KEY (TeamId) REFERENCES Team(TeamId)
 );
 
 -- BowlingUser records
-INSERT into BowlingUser values (1, 'smonk', 'AQAAAAEAACcQAAAAEPQro/Cly4kMPIMVROEdmfpcsWzkPBBUBqAfjxHwgQJPjRJrCXxXSLMFYEK0Fqxlpw==', 1);
+INSERT into BowlingUser values (1, 'smonk', 'AQAAAAIAAYagAAAAEIqCPZxk8RTs3R6K/dYZAWlDgCr83d3U3MDums/YuZEQl/gXqc+e7AsNVHp3jMBtOg==', 1);
 
+-- Division records
+INSERT INTO Division VALUES (1, 'Men''s');
+INSERT INTO Division VALUES (2, 'Women''s');
+INSERT INTO Division VALUES (3, 'Mixed');
+INSERT INTO Division VALUES (4, 'Youth');
+INSERT INTO Division VALUES (5, 'Senior');
 
 -- Team records
-insert into Team values (1, 'Holy Rollers', 'Youth', 1, '2025-11-10');
-insert into Team values (2, 'Jesus Take the Ball', 'Mens', 1, '2025-12-03');
-insert into Team values (3, 'Spare Disciples ', 'Womens', 1, '2025-12-04');
-insert into Team values (4, 'Our father Who art in the Gutter', 'Mens', 0, 'null');
-insert into Team values (5, 'Let There Be Strikes', 'Youth', 1, '2025-12-06');
-insert into Team values (6, 'Split Happens', 'Mens', 0, 'null');
-insert into Team values (7, 'Strike Force', 'Mixed', 0, 'null');
-insert into Team values (8, 'Spare Me', 'Womens', 1, '2025-11-06');
-insert into Team values (9, 'The Bowling Stones', 'Mens', 1, '2025-11-01');
-insert into Team values (10, 'The LuckyStrikes', 'Mixed', 0, 'null');
-insert into Team values (11, 'Avengers', 'Senior', 0, 'null');
-insert into Team values (12, 'Justice League', 'Senior', 1, '2025-10-22');
-insert into Team values (13, 'Joestars', 'Youth', 0, 'null');
-insert into Team values (14, 'The Empire', 'Mens', 1, '1977-05-25');
-insert into Team values (15, 'The Seven', 'Senior', 0, 'null');
-insert into Team values (16, 'The Pinheads', 'Mixed', 1, '2025-11-07');
-insert into Team values (17, 'Guardians of the Gutter', 'Mens', 0, 'null');
-insert into Team values (18, 'Slippin Jimmies', 'Womens', 1, '2025-11-01');
-insert into Team values (19, 'Appolosa', 'Senior Mens', 0, 'null');
-insert into Team values (20, 'Freedom''s Finest', 'Mixed', 1, '2025-11-05');
-insert into Team values (21, 'Pin Harmony', 'Womens', 1, '2025-11-04');
-insert into Team values (22, 'Alley Cats', 'Youth', 0, 'null');
-insert into Team values (23, 'Bowl Movements', 'Mens', 0, 'null');
-insert into Team values (24, 'All Too Spare', 'Mixed', 1, '2025-11-10');
-insert into Team values (25, 'Folklane', 'Womens', 1, '2025-11-02');
-insert into Team values (26, 'Gutter Guys', 'Senior Mens', 0, 'null');
-insert into Team values (27, 'Bumper Boys', 'Youth', 0, 'null');
-insert into Team values (28, 'Ford Pintos', 'Mens', 1, '2025-11-02');
-insert into Team values (29, 'Spare Nine', 'Womens', 1, '2025-11-01');
-insert into Team values (30, 'Turkey Dinner', 'Mixed', 1, '2025-11-04');
-insert into Team values (31, 'The Mismatched Socks', 'Womens', 0, 'null');
-insert into Team values (32, 'The Strikers', 'Senior Mens', 0, 'null');
-insert into Team values (33, 'Burly Bros', 'Mens', 1, '2025-11-01');
-insert into Team values (34, 'Rampant Ragers', 'Mixed', 1, '2025-11-02');
-insert into Team values (35, 'Peak Performers', 'Youth', 1, '2025-11-05');
-insert into Team values (36, 'The Big Lebowski''s', 'Senior', 1, '1998-03-06');
-insert into Team values (37, 'Pin Pals', 'Mens', 0, 'null');
-insert into Team values (38, 'The Government', 'Senior', 0, 'null');
-insert into Team values (39, 'Moms Against Drunk Bowling', 'Womens', 1, '2025-11-10');
-insert into Team values (40, 'I Can''t Believe It''s Not Gutter', 'Mens', 1, '2025-10-17');
-insert into Team values (41, 'Kalahari Kings', 'Senior Mens', 0, 'null');
-insert into Team values (42, 'Zambezi Rollers', 'Youth', 1, '2025-11-05');
-insert into Team values (43, 'Ubuntu United', 'Mixed', 0, 'null');
-insert into Team values (44, 'Sahara Sweepers', 'Womens', 1, '2025-11-15');
-insert into Team values (45, 'Thunder Ngoma', 'Mens', 1, '2025-10-30');
-insert into Team values (46, 'Magic Mohawks', 'Youth', 0, 'null');
-insert into Team values (47, 'The Chimichangas', 'Mixed', 1, '2025-11-08');
-insert into Team values (48, 'BigBros Burritos', 'Mens', 1, '2025-09-17');
-insert into Team values (49, 'Single Mommies Power', 'Womens', 1, '2025-10-31');
-insert into Team values (50, 'Lil Bro''s Childcare', 'Youth', 1, '2025-11-06');
+insert into Team values (1, 'Holy Rollers', 4, 1, '2025-11-10');
+insert into Team values (2, 'Jesus Take the Ball', 1, 1, '2025-12-03');
+insert into Team values (3, 'Spare Disciples', 2, 1, '2025-12-04');
+insert into Team values (4, 'Our Father Who Art in the Gutter', 1, 0, NULL);
+insert into Team values (5, 'Let There Be Strikes', 4, 1, '2025-12-06');
+insert into Team values (6, 'Split Happens', 1, 0, NULL);
+insert into Team values (7, 'Strike Force', 3, 0, NULL);
+insert into Team values (8, 'Spare Me', 2, 1, '2025-11-06');
+insert into Team values (9, 'The Bowling Stones', 1, 1, '2025-11-01');
+insert into Team values (10, 'The Lucky Strikes', 3, 0, NULL);
+insert into Team values (11, 'Avengers', 5, 0, NULL);
+insert into Team values (12, 'Justice League', 5, 1, '2025-10-22');
+insert into Team values (13, 'Joestars', 4, 0, NULL);
+insert into Team values (14, 'The Empire', 1, 1, '1977-05-25');
+insert into Team values (15, 'The Seven', 5, 0, NULL);
+insert into Team values (16, 'The Pinheads', 3, 1, '2025-11-07');
+insert into Team values (17, 'Guardians of the Gutter', 1, 0, NULL);
+insert into Team values (18, 'Slippin Jimmies', 2, 1, '2025-11-01');
+insert into Team values (19, 'Appolosa', 5, 0, NULL);
+insert into Team values (20, 'Freedom''s Finest', 3, 1, '2025-11-05');
+insert into Team values (21, 'Pin Harmony', 2, 1, '2025-11-04');
+insert into Team values (22, 'Alley Cats', 4, 0, NULL);
+insert into Team values (23, 'Bowl Movements', 1, 0, NULL);
+insert into Team values (24, 'All Too Spare', 3, 1, '2025-11-10');
+insert into Team values (25, 'Folklane', 2, 1, '2025-11-02');
+insert into Team values (26, 'Gutter Guys', 1, 0, NULL);
+insert into Team values (27, 'Bumper Boys', 4, 0, NULL);
+insert into Team values (28, 'Ford Pintos', 1, 1, '2025-11-02');
+insert into Team values (29, 'Spare Nine', 2, 1, '2025-11-01');
+insert into Team values (30, 'Turkey Dinner', 3, 1, '2025-11-04');
+insert into Team values (31, 'The Mismatched Socks', 2, 0, NULL);
+insert into Team values (32, 'The Strikers', 5, 0, NULL);
+insert into Team values (33, 'Burly Bros', 1, 1, '2025-11-01');
+insert into Team values (34, 'Rampant Ragers', 3, 1, '2025-11-02');
+insert into Team values (35, 'Peak Performers', 4, 1, '2025-11-05');
+insert into Team values (36, 'The Big Lebowski''s', 5, 1, '1998-03-06');
+insert into Team values (37, 'Pin Pals', 1, 0, NULL);
+insert into Team values (38, 'The Government', 5, 0, NULL);
+insert into Team values (39, 'Moms Against Drunk Bowling', 2, 1, '2025-11-10');
+insert into Team values (40, 'I Can''t Believe It''s Not Gutter', 1, 1, '2025-10-17');
+insert into Team values (41, 'Kalahari Kings', 1, 0, NULL);
+insert into Team values (42, 'Zambezi Rollers', 4, 1, '2025-11-05');
+insert into Team values (43, 'Ubuntu United', 3, 0, NULL);
+insert into Team values (44, 'Sahara Sweepers', 2, 1, '2025-11-15');
+insert into Team values (45, 'Thunder Ngoma', 1, 1, '2025-10-30');
+insert into Team values (46, 'Magic Mohawks', 4, 0, NULL);
+insert into Team values (47, 'The Chimichangas', 3, 1, '2025-11-08');
+insert into Team values (48, 'BigBros Burritos', 1, 1, '2025-09-17');
+insert into Team values (49, 'Single Mommies Power', 2, 1, '2025-10-31');
+insert into Team values (50, 'Lil Bro''s Childcare', 4, 1, '2025-11-06');
 
 
 -- Player records
@@ -242,7 +259,7 @@ insert into Player values (151, 38, 'Justin Treadau Sr.', 'Ottawa', 'ON', 'justi
 insert into Player values (152, 38, 'Stephen Harper', 'Ottawa', 'ON', 'stephenharper@canadagov.ca', '506-275-4648');
 insert into Player values (153, 39, 'Erica Grutzner', 'Saint John', 'NB', 'ericag@gmail.com', '506-543-5634');
 insert into Player values (154, 39, 'Sandra Wozniac', 'Moncton', 'NB', 'sanwoz@hotmail.com', '532-434-4871');
-insert into Player values (155, 39, 'Gwen Miller', 'Sussex', 'NB', 'gwenmill123@gmail.com', '645-566=3555');
+insert into Player values (155, 39, 'Gwen Miller', 'Sussex', 'NB', 'gwenmill123@gmail.com', '645-566-3555');
 insert into Player values (156, 39, 'Barb Herman', 'Baxters Corner', 'NB', 'barbherman@yahoo.com', '987-432-4643');
 insert into Player values (157, 40, 'Manny Manual', 'Kingston ', 'NB', 'manman@gmail.com', '426-953-8653');
 insert into Player values (158, 40, 'Arin hanson', 'Victoria', 'BC', 'arinhanson33@gmail.com', '543-862-8343');
