@@ -1,1 +1,34 @@
-﻿<h5>Team Details</h5>
+﻿@using TermProject.ViewModels
+@model TeamVm
+
+@*header partial to show company name and photo header*@
+@section SiteHeader {
+	@Html.Partial("_SiteHeader")
+}
+
+@*Team deatils age that shows the teams name and division
+	and loops through all the players in that team to show their names 
+	and city,province
+*@
+<div class="d-flex justify-content-center align-items-center mt-5">
+<div class="card w-75 my-0">
+	<div class="card-header">
+		<h2>@Model.TeamName</h2>
+		<h4>@Model.Division</h4>
+	</div>
+	<div class="card-body">
+		<h5>Players</h5>
+		<ul>
+			@foreach(var p in Model.Players)
+			{
+				<li>
+					@p.Name <br />
+					@p.City, @p.Province				
+				</li>
+			}
+		</ul>
+	</div>
+</div>
+</div>
+
+

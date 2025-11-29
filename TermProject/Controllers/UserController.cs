@@ -89,7 +89,7 @@ namespace TermProject.Controllers
             //create new team object:
             Team team = new Team();
             team.TeamName = vm.TeamName;
-            team.Division = vm.Division;
+            team.Division.DivisionName = vm.Division;
             team.RegistrationPaid = vm.RegistrationPaid;
             team.PaymentDate = vm.PaymentDate;
 

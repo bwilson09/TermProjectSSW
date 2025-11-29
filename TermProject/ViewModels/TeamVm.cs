@@ -11,6 +11,8 @@ namespace TermProject.ViewModels
         [Required]
         public string Division { get; set; }
 
-        public List<string> Players { get; set; }
+        public List<PlayerVm> Players { get; set; }
     }
+   
+
 }

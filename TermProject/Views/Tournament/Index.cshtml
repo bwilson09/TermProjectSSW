@@ -1,11 +1,10 @@
 ﻿@using TermProject.ViewModels
 @model IEnumerable<TeamVm>
 
-@*header here with background photo*@
-
-<div class="bowling-header align-items-center justify-content-center d-flex">
-	<h1 class="fw-bold">SAINT JOHN BOWLING ASSOCIATION</h1>
-</div>
+@*header partial to show company name and photo header*@
+@section SiteHeader {
+	@Html.Partial("_SiteHeader")
+}
 
 <div class="mt-5 text-center p-3">
 	<h3>Saint John's Bowling Association is hosting their 50th annual bowling tournament 
@@ -30,11 +29,11 @@
 	<h4>See Our Teams</h4>
 </div>
 
-@*Cards here to show off the registered teams?
+@*Cards here to show off the registered teams
 	Only paid teams will appear- that have 4 members
-	Team Name, Division and Players will be visible
-	Use the User View Model for this?
-	Have another Vm for the register page?
+	Team Name, Division will be visible
+	link to details page will show player info
+
 *@
 
 @{
@@ -58,15 +57,11 @@
 					<!--show the team name first and then their division-->
 					<h5 class="card-title text-center">@team.TeamName</h5>
 					<p class="card-text text-center">Division: @team.Division</p>
-					<ul>
-						<!--looping through the team players and adding their name to a list-->
-						@foreach(var p in team.Players)
-						{
-							<li>@p</li>
-						}
-					</ul>
+					
 					@*link button to take user to see more team details*@
+					<div class="text-center">
 					<a asp-controller="Tournament" asp-action="TeamDetails" asp-route-id="@team.Id" class="btn btn-sm btn-secondary">View Team Details</a>
+					</div>
 				</div>
 			</div>
 		</div>

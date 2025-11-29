@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 //adding in the DbContext
 builder.Services.AddDbContext<TournamentDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("TournamentDb"))
+    options.UseSqlite(builder.Configuration.GetConnectionString("BowlingDb"))
 );
 
 

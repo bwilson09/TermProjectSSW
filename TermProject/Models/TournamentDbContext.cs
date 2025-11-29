@@ -14,6 +14,7 @@ namespace TermProject.Models
         public DbSet<Player> Player => Set<Player>();
 
         public DbSet<BowlingUser> BowlingUser => Set<BowlingUser>();
+        public DbSet<Division> Division => Set<Division>();
 
 
 
@@ -26,6 +27,7 @@ namespace TermProject.Models
             modelBuilder.Entity<Team>().ToTable("Team");
             modelBuilder.Entity<Player>().ToTable("Player");
             modelBuilder.Entity<BowlingUser>().ToTable("BowlingUser");
+            modelBuilder.Entity<Division>().ToTable("Division");
         }
     }
 }
