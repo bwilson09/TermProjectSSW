@@ -6,6 +6,13 @@
 	@Html.Partial("_SiteHeader")
 }
 
+@if (TempData["Success"] != null)
+{
+	<div class="alert alert-success mt-4">
+		@TempData["Success"]
+	</div>
+}
+
 <div class="mt-5 text-center p-3">
 	<h3>Saint John's Bowling Association is hosting their 50th annual bowling tournament 
 		this December!		

@@ -7,7 +7,7 @@
         public int DivisionId { get; set; }
         public bool RegistrationPaid { get; set; }
        
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         public Team() { }
 
