@@ -79,7 +79,7 @@ namespace TermProject.Controllers
 
             await HttpContext.SignInAsync("app-cookie", principal);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "User");
 
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using TermProject.Models;
 using TermProject.ViewModels;
 
@@ -21,6 +22,25 @@ namespace TermProject.Controllers
         public UserController(TournamentDbContext db)
         {
             _db = db;
+        }
+
+        public IActionResult Index()
+        {
+            //query the teams in the db, including their players and division
+            var vm = _db.Team
+                .Include(t => t.Division)
+                .Select(t => new AdminIndexVm
+                {
+                    TeamId = t.TeamId,
+                    TeamName =t.TeamName,
+                    DivisionId = t.DivisionId,
+                    DivisionName = t.Division.DivisionName,
+                    RegistrationPaid = t.RegistrationPaid,
+                    PaymentDate = t.PaymentDate
+
+                }).ToList();
+
+            return View(vm);
         }
 
         //GET index??? do we need an index page for the user controller???

@@ -1,0 +1,41 @@
+﻿@using TermProject.ViewModels
+@model IEnumerable<AdminIndexVm>
+
+<h2>Tournament Teams</h2>
+
+@*buttons here for creating and filtering*@
+<div class="my-3">
+	<a asp-controller="User" asp-action="Add" class="btn btn-secondary">Add New Team</a>
+</div>
+
+<div>
+	<table class="table table-bordered table-striped align-middle">
+		<thead>
+			<tr>
+				<th>Team ID</th>
+				<th>Team Name</th>
+				<th>Division</th>
+				<th>Paid?</th>
+				<th>Payment Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var t in Model)
+			{
+				<tr>
+					<td>@t.TeamId</td>
+					<td>@t.TeamName</td>
+					<td>@t.DivisionName</td>
+					<td>@(t.RegistrationPaid ? "Yes" : "No")</td>
+					<td>@(t.RegistrationPaid? t.PaymentDate?.ToString("dd-MMM-yyyy") : "")</td>
+					<td>
+						<a asp-action="Edit" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary">Edit Team</a><br />
+						<a asp-action="ManagePlayers" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary my-1">Manage Players</a><br />
+						<a asp-action="Delete" asp-route-id="@t.TeamId" class="btn btn-sm btn-danger">Delete Team</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
