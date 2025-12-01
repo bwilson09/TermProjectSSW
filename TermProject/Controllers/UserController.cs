@@ -67,10 +67,6 @@ namespace TermProject.Controllers
         //}
 
 
-
-
-
-
         //GET add
         [HttpGet]
         public IActionResult Add()
@@ -80,43 +76,110 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
-            var vm = new UserVm();
-
-            //get data for dropdowns (come back to this later)
-            //vm.DivisionOptions = BuildCategoryOptions();
-            //vm.ProvinceOptions = BuildProvinceOptions();
-
+            //getting the team vm
+            var vm = new TeamRegisterVm
+            {
+                //getting a list of the playvm
+                Players = new List<PlayerRegisterVm>
+                {
+                    //adding 4 playerVm here as 4 players are needed for a team
+                    //allows sections for all 4 of the players to be added
+                    new PlayerRegisterVm(),
+                    new PlayerRegisterVm(),
+                    new PlayerRegisterVm(),
+                    new PlayerRegisterVm()
+                },
+                //populating the list in the vm
+                //accessing the db names from division table
+                Divisions = _db.Division
+                .Select(d => new SelectListItem
+                {
+                    Value = d.DivisionId.ToString(),
+                    Text = d.DivisionName
+                })
+                .ToList()
+            };
             return View(vm);
         }
 
         //POST add TEAM
         [HttpPost]
-        public IActionResult Add(UserVm vm)
+        public IActionResult Add(TeamRegisterVm vm)
         {
             if (!IsAdmin())
             {
                 return RedirectToAction("Denied", "Auth");
             }
 
+            if (vm == null)
+            {
+                return NotFound();
+            }
+            //checking to make sure teamname doesnt already exist
+            if (_db.Team.Any(t => t.TeamName == vm.TeamName))
+            {
+                ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
+            }
+
+            //checking to make sure 4 player info was provided
+            if (vm.Players == null || vm.Players.Count != 4)
+            {
+                ModelState.AddModelError("Players", "You must register exactly 4 players for your team");
+            }
+
+            //check if any of the validation has failed and redisplay the form
             if (!ModelState.IsValid)
             {
-                //dropdowns ?? come back to this later
-                //vm.DivisionOptions = BuildCategoryOptions();
-                //vm.ProvinceOptions = BuildProvinceOptions();
+                //need to repopulate the divisions for the dropdown
+                vm.Divisions = _db.Division
+                .Select(d => new SelectListItem
+                {
+                    Value = d.DivisionId.ToString(),
+                    Text = d.DivisionName
+                })
+                .ToList();
+
                 return View(vm);
             }
 
-            //create new team object:
-            Team team = new Team();
-            team.TeamName = vm.TeamName;
-            team.Division.DivisionName = vm.Division;
-            team.RegistrationPaid = vm.RegistrationPaid;
-            team.PaymentDate = vm.PaymentDate;
-
+            //if no validation errors and nothing is left blank- add the team to db
+            var team = new Team
+            {
+                TeamName = vm.TeamName,
+                DivisionId = (int)vm.DivisionId.Value,
+                RegistrationPaid = vm.RegistrationPaid,
+                PaymentDate = vm.RegistrationPaid ? (vm.PaymentDate ?? DateTime.Now) : null
+            };
+            //add the team and save the changes to generate the team id
             _db.Team.Add(team);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+
+            //add all the players by looping through the list of players
+            foreach (var p in vm.Players)
+            {
+                var player = new Player
+                {
+                    PlayerName = p.PlayerName,
+                    City = p.City,
+                    Province = p.Province,
+                    Email = p.Email,
+                    Phone = p.Phone,
+                    //add team id to connect players to their team
+                    TeamId = team.TeamId
+                };
+                //add the players to the db
+                _db.Player.Add(player);
+            }
+            _db.SaveChanges();
+
+            //send a success message back to the register page for users
+            TempData["Success"] = "Team has been added";
+
+            return RedirectToAction("Index", "User");
         }
+
+    
+
 
 
         //POST add player

@@ -8,6 +8,13 @@
 	<a asp-controller="User" asp-action="Add" class="btn btn-secondary">Add New Team</a>
 </div>
 
+@if (TempData["Success"] != null)
+{
+	<div class="alert alert-success my-2">
+		@TempData["Success"]
+	</div>
+}
+
 <div>
 	<table class="table table-bordered table-striped align-middle">
 		<thead>

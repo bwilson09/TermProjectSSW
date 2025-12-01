@@ -19,6 +19,9 @@ namespace TermProject.ViewModels
         [MinLength(4, ErrorMessage ="Must have 4 players register")]
         public List<PlayerRegisterVm>Players { get; set; }
 
+        public bool RegistrationPaid { get; set; }
+        public DateTime? PaymentDate { get; set; }
+
         //adding list here in order to populate dropdown on user page with the division names
         public IEnumerable<SelectListItem> Divisions { get; set; } = new List<SelectListItem>();
     }
@@ -36,6 +39,7 @@ namespace TermProject.ViewModels
         public string City { get; set; }
 
         [Required(ErrorMessage = "Province is required")]
+        [StringLength(2, MinimumLength =2, ErrorMessage ="Province must be 2 letter code")]
         public string Province { get; set; }
 
         [Required(ErrorMessage = "Email is required")]

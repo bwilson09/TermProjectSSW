@@ -71,7 +71,7 @@ namespace TermProject.Controllers
 
             if (userName.IsAdmin)
             {
-                claims.Add(new Claim("IsAdmin", "true"));
+                claims.Add(new Claim("IsAdmin", "True"));
             }
 
             var identity = new ClaimsIdentity(claims, "app-cookie");
