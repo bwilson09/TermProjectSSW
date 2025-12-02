@@ -6,6 +6,8 @@ namespace TermProject.ViewModels
 {
     public class TeamRegisterVm
     {
+        public int TeamId { get; set; }
+
         //vm for the team info
         [Required(ErrorMessage = "Division is required")]
         public int? DivisionId { get; set; }

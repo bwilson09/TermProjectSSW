@@ -12,5 +12,7 @@
         public Team() { }
 
         public Division Division { get; set; }
+
+        public List<Player> Players { get; set; } = new List<Player>();
     }
 }

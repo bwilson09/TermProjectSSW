@@ -28,15 +28,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
                         </li>
-                        <!-- adding login button to shared layout to show in header -->
+                        <!-- adding admin buttons to shared layout to show in header when admin is logged in -->
                         <li class="nav-item ms-auto d-flex align-items-center">
                             @if (User.Identity != null && User.Identity.IsAuthenticated)
                             {
                                 <span class="me-2 text-dark"> Welcome, Admin </span>
 
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary ms-3" asp-controller="User" asp-action="Index">
+                                    Admin Dashboard
+                                </a>
+                                </li>
+
+                            <li class="nav-item ms-2">
                                 <form asp-action="Logout" asp-controller="Auth" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link p-0">Logout</button>
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        Logout
+                                    </button>
                                 </form>
+                            </li>
+
                             }
                             else
                             {
