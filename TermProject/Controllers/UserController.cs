@@ -27,7 +27,7 @@ namespace TermProject.Controllers
         public IActionResult Index()
         {
             //query the teams in the db, including their players and division
-            var vm = _db.Team
+            var teams = _db.Team
                 .Include(t => t.Division)
                 .Select(t => new AdminIndexVm
                 {
@@ -40,6 +40,26 @@ namespace TermProject.Controllers
 
                 }).ToList();
 
+            //get the view model as the wrapper to get the teams and set up the dropdowns for filtering
+            var vm = new AdminWrapperVm
+            {
+                Teams = teams,
+                Filter = new FilterVm
+                {
+                    Divisions = _db.Division.Select(d => new SelectListItem
+                    {
+                        Value = d.DivisionId.ToString(),
+                        Text = d.DivisionName
+                    }).ToList(),
+
+                    Payments = new List<SelectListItem>
+                {
+                        new SelectListItem { Value = "", Text = "-- All --" },
+                new SelectListItem { Value = "true", Text = "Paid Teams" },
+                new SelectListItem { Value = "false", Text = "Unpaid Teams" }
+                }
+                }
+            };
             return View(vm);
         }
 
@@ -213,10 +233,61 @@ namespace TermProject.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Filter(int? divisionId, bool? registrationPaid)
+        {
+            //get a new instance of the filter view model
+            var vm = new AdminWrapperVm();
+
+            vm.Filter.DivisionId = divisionId;
+            vm.Filter.RegistrationPaid = registrationPaid;
+            //build the divisions dropdown
+
+            vm.Filter.Divisions = _db.Division
+               .Select(d => new SelectListItem
+               {
+                   Value = d.DivisionId.ToString(),
+                   Text = d.DivisionName
+               })
+               .ToList();
+            
+
+            //building the paid dropdown
+                vm.Filter.Payments = new List<SelectListItem>
+                {
+                    new SelectListItem {Value = "", Text = "-- All --" },
+                    new SelectListItem {Value = "true", Text = "Paid Teams" },
+                    new SelectListItem {Value = "false", Text = "Unpaid Teams" }
+                };
+
+            var query = _db.Team.Include(t => t.Division).AsQueryable();
+            //query to filter by division
+            if(divisionId != null && divisionId.HasValue)
+            {
+                query = query.Where(t => t.DivisionId == divisionId.Value);
+                
+            }
+
+            if(registrationPaid != null && registrationPaid.HasValue)
+            {
+                query = query.Where(t => t.RegistrationPaid == registrationPaid.Value);
+                
+            }
+
+            vm.Teams = query.Select(t => new AdminIndexVm
+            { 
+                TeamId = t.TeamId,
+                TeamName = t.TeamName,
+                DivisionName = t.Division.DivisionName,
+                RegistrationPaid = t.RegistrationPaid,
+                PaymentDate = t.PaymentDate
+            }).ToList();
+             
+            return View(vm);
 
 
-        //need to do methods for editing and deleting teams and players 
+        }
 
-
+        
     }
 }

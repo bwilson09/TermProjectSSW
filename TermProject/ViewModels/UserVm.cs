@@ -6,7 +6,7 @@ namespace TermProject.ViewModels
 {
     public class UserVm
     {
-
+        //may not need this one? used teamregisterVm for public and admin
         //team validation
 
         [Required(ErrorMessage = "A team name is required.")]

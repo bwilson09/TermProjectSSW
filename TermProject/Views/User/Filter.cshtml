@@ -1,32 +1,14 @@
 ﻿@using TermProject.ViewModels
 @model AdminWrapperVm
 
-<h2>Tournament Teams</h2>
+<h2>Filtered Teams</h2>
 
-@*buttons here for creating and filtering
-	filter by payment and filter by division
-*@
+<div class="my-3">
+	<a asp-controller="User" asp-action="Index" class="btn btn-secondary">Back</a>
 
-<div class="my-3 d-flex">
-	<a asp-controller="User" asp-action="Add" class="btn btn-secondary">Add New Team</a>
-	<form method="get" asp-action="Filter" asp-controller="User" class="ms-2">
-		<select name="divisionId" asp-items="Model.Filter.Divisions">
-			<option value="">--All Divisions--</option>
-		</select>
-		<select name="registrationPaid" asp-items="Model.Filter.Payments">
-			@* <option value="">--All--</option> *@
-		</select>
-		<button type="submit">Apply Filter</button>
-	</form>
 </div>
 
-@* @if (TempData["Success"] != null)
-{
-	<div class="alert alert-success my-2">
-		@TempData["Success"]
-	</div>
-} *@
-
+@if (Model.Teams.Any()){
 <div>
 	<table class="table table-bordered table-striped align-middle">
 		<thead>
@@ -40,7 +22,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach(var t in Model.Teams)
+			@foreach (var t in Model.Teams)
 			{
 				<tr>
 					<td>@t.TeamId</td>
@@ -57,4 +39,10 @@
 			}
 		</tbody>
 	</table>
-</div>
+	</div>
+}
+else
+{
+	<div class="alert alert-danger fs-2 mt-4">No teams found for selected filters</div>
+}
+

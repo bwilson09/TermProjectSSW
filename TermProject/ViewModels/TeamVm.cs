@@ -12,7 +12,11 @@ namespace TermProject.ViewModels
         public string Division { get; set; }
 
         public List<PlayerVm> Players { get; set; }
+
+        public bool RegistrationPaid { get; set; }
+        public DateTime? PaymentDate { get; set; }
+
     }
-   
+
 
 }

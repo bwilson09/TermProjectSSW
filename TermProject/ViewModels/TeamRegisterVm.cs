@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace TermProject.ViewModels
@@ -23,6 +24,7 @@ namespace TermProject.ViewModels
         public DateTime? PaymentDate { get; set; }
 
         //adding list here in order to populate dropdown on user page with the division names
+        [ValidateNever]
         public IEnumerable<SelectListItem> Divisions { get; set; } = new List<SelectListItem>();
     }
 
