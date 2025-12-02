@@ -11,5 +11,8 @@ namespace TermProject.ViewModels
         public string DivisionName { get; set; }
         public bool RegistrationPaid { get; set; }
         public DateTime? PaymentDate { get; set; }
+
+        //list of players associated with the team
+        public List<PlayerRegisterVm> Players { get; set; }
     }
 }

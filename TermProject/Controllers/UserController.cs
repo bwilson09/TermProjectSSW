@@ -353,6 +353,83 @@ namespace TermProject.Controllers
 
 
 
+        // DELETE TEAMS**********************
+
+
+        //view page to display team and player info to confirm user is sure
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Denied", "Auth");
+            }
+
+            //get the team and player values to be deleeted
+            var team = _db.Team
+                .Include(t => t.Division)
+                .Include(t => t.Players)
+                .FirstOrDefault(t => t.TeamId == id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            //map team and player info to adminindexVM to display
+            var vm = new AdminIndexVm
+            {
+                TeamId = team.TeamId,
+                TeamName = team.TeamName,
+                DivisionName = team.Division.DivisionName,
+                RegistrationPaid = team.RegistrationPaid,
+                PaymentDate = team.PaymentDate,
+                Players = team.Players.Select(p => new PlayerRegisterVm
+                    {
+                        PlayerName = p.PlayerName,
+                        City = p.City,
+                        Province = p.Province,
+                        Email = p.Email,
+                        Phone = p.Phone
+                    }).ToList()
+                  };
+
+            return View(vm);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(AdminIndexVm vm)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Denied", "Auth");
+            }
+
+            //query to find the team and players to delete
+            var team = _db.Team
+                .Include(t => t.Players)
+                .FirstOrDefault(t => t.TeamId == vm.TeamId);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            //Remove all players associated with the team (RemoveRange will delete a list)
+            _db.Player.RemoveRange(team.Players);
+            //delete the team itself
+            _db.Team.Remove(team);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
 
 
 
@@ -368,6 +445,7 @@ namespace TermProject.Controllers
 
 
         // FILTERING TEAMS**********************
+
         [HttpGet]
         public IActionResult Filter(int? divisionId, bool? registrationPaid)
         {

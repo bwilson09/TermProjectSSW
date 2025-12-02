@@ -1,5 +1,44 @@
-﻿@using TermProject.ViewModels
-@model IEnumerable<UserVm>
+﻿@model TermProject.ViewModels.AdminIndexVm
 
+<h2>Confirm Delete</h2>
 
-<h2> DELETE </h2>
+<div class="alert alert-warning">
+    <strong>Are you sure you want to delete this team and all of its players?</strong>
+</div>
+
+<div class="card p-3">
+    <h4>Team Info</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>Team Name</th>
+            <td>@Model.TeamName</td>
+        </tr>
+        <tr>
+            <th>Division</th>
+            <td>@Model.DivisionName</td>
+        </tr>
+    </table>
+
+    <h4>Players</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model.Players)
+            {
+                <tr>
+                    <td>@player.PlayerName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="TeamId" />
+        <button type="submit" class="btn btn-danger">Delete Team & Players</button>
+        <a asp-action="Index" asp-controller="User" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
