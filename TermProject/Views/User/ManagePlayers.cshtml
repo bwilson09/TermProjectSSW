@@ -1,5 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using TermProject.ViewModels
+@model TeamRegisterVm
+
+<h2 class="mb-4">Manage Players</h2>
+
+<div class="alert alert-info">
+    Each team must have exactly 4 players.
+</div>
+
+<form asp-controller="User" asp-action="ManagePlayers" method="post">
+
+    @* used hidden inputs to store required fields for model binding*@
+    <input type="hidden" asp-for="TeamId" />
+    <input type="hidden" asp-for="TeamName" />
+    <input type="hidden" asp-for="DivisionId" />
+    <input type="hidden" asp-for="RegistrationPaid" />
+    <input type="hidden" asp-for="PaymentDate" />
+
+    <div class="row">
+        @for (int i = 0; i < 4; i++)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        Player# @(i + 1)
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Players[i].PlayerName" class="form-label">Name</label>
+                            <input asp-for="Players[i].PlayerName" class="form-control"  />
+                            <span asp-validation-for="Players[i].PlayerName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Players[i].City" class="form-label">City</label>
+                            <input asp-for="Players[i].City" class="form-control"  />
+                            <span asp-validation-for="Players[i].City" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Players[i].Province" class="form-label">Province</label>
+                            <input asp-for="Players[i].Province" class="form-control" maxlength="2" pattern="[A-Z]{2}"  />
+                            <span asp-validation-for="Players[i].Province" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Players[i].Email" class="form-label">Email</label>
+                            <input asp-for="Players[i].Email" class="form-control"/>
+                            <span asp-validation-for="Players[i].Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Players[i].Phone" class="form-label">Phone</label>
+                            <input asp-for="Players[i].Phone" class="form-control"  />
+                            <span asp-validation-for="Players[i].Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-lg btn-success">Save Players </button>
+        <a asp-action="Index" asp-controller="User" class="btn btn-lg btn-secondary ms-2">Cancel</a>
+    </div>
+</form>

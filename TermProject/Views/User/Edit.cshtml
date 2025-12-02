@@ -23,38 +23,6 @@
             <span class="text-danger" asp-validation-for="DivisionId"></span>
         </div>
 
-        <div class="text-center fs-3 mt-1">
-            Player Information
-        </div>
-        @for (int i = 0; i < Model.Players.Count; i++)
-        {
-            <div class="my-2 fs-5">Player @(i + 1)</div>
-            <div>
-                <label asp-for="Players[i].PlayerName">Name</label>
-                <input asp-for="Players[i].PlayerName" class="form-control" />
-                <span asp-validation-for="Players[i].PlayerName" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Players[i].City"></label>
-                <input asp-for="Players[i].City" class="form-control" />
-                <span asp-validation-for="Players[i].City" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Players[i].Province"></label>
-                <input asp-for="Players[i].Province" class="form-control" maxlength="2" pattern="[A-Z]{2}" />
-                <span asp-validation-for="Players[i].Province" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Players[i].Email"></label>
-                <input asp-for="Players[i].Email" class="form-control" />
-                <span asp-validation-for="Players[i].Email" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Players[i].Phone"></label>
-                <input asp-for="Players[i].Phone" class="form-control" />
-                <span asp-validation-for="Players[i].Phone" class="text-danger"></span>
-            </div>
-        }
 
         <div class="mt-2 fs-3">
             Mark as Paid

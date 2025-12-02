@@ -243,6 +243,116 @@ namespace TermProject.Controllers
 
         // EDIT TEAMS**********************
 
+        //[HttpGet]
+        //public IActionResult Edit(int id)
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        //only admins can edit teams
+        //        return RedirectToAction("Denied", "Auth");
+        //    }
+
+        //    // query to get the team with the specfieid ID
+        //    //get division and player info
+
+        //    var team = _db.Team
+        //        .Include(t => t.Division)
+        //        .Include(t => t.Players)
+        //        .FirstOrDefault(t => t.TeamId == id);
+
+        //    if (team == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //map the team info to teamregistervm to populate values in the edit form
+        //    var vm = new TeamRegisterVm
+        //    {
+        //        TeamId = team.TeamId,
+        //        TeamName = team.TeamName,
+        //        DivisionId = team.DivisionId,
+        //        RegistrationPaid = team.RegistrationPaid,
+        //        PaymentDate = team.PaymentDate,
+
+        //        //map the players to the playerregisterVM for form
+        //        Players = team.Players.Select(p => new PlayerRegisterVm
+        //        {
+        //            PlayerName = p.PlayerName,
+        //            City = p.City,
+        //            Province = p.Province,
+        //            Email = p.Email,
+        //            Phone = p.Phone
+        //        }).ToList(),
+
+        //        //build the divisions dropdown
+        //        Divisions = _db.Division
+        //            .Select(d => new SelectListItem
+        //            {
+        //                //default selection will be the current division
+        //                Value = d.DivisionId.ToString(),
+        //                Text = d.DivisionName
+        //            })
+        //            .ToList()
+        //    };
+
+        //    return View(vm);
+        //}
+
+
+
+        //[HttpPost]
+        //public IActionResult Edit(TeamRegisterVm vm)
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        return RedirectToAction("Denied", "Auth");
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        //if model state is invalid, repopulate divisions for dropdown and redisplay page
+        //        vm.Divisions = _db.Division
+        //            .Select(d => new SelectListItem
+        //            {
+        //                Value = d.DivisionId.ToString(),
+        //                Text = d.DivisionName
+        //            })
+        //            .ToList();
+        //        return View(vm);
+        //    }
+
+        //    //get the team from the database in order to update 
+        //    var team = _db.Team
+        //        .Include(t => t.Players)
+        //        .FirstOrDefault(t => t.TeamId == vm.TeamId);
+
+        //    if (team == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //update the team entity with the edited values
+        //    team.TeamName = vm.TeamName;
+        //    team.DivisionId = (int)vm.DivisionId.Value;
+        //    team.RegistrationPaid = vm.RegistrationPaid;
+        //    team.PaymentDate = vm.RegistrationPaid ? (vm.PaymentDate ?? DateTime.Now) : null;
+
+        //    //loop through all team players and update their info
+        //    for (int i = 0; i < vm.Players.Count; i++)
+        //    {
+        //        team.Players[i].PlayerName = vm.Players[i].PlayerName;
+        //        team.Players[i].City = vm.Players[i].City;
+        //        team.Players[i].Province = vm.Players[i].Province;
+        //        team.Players[i].Email = vm.Players[i].Email;
+        //        team.Players[i].Phone = vm.Players[i].Phone;
+        //    }
+
+        //    _db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
+
+
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -251,6 +361,7 @@ namespace TermProject.Controllers
                 //only admins can edit teams
                 return RedirectToAction("Denied", "Auth");
             }
+
 
             // query to get the team with the specfieid ID
             //get division and player info
@@ -308,6 +419,9 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
+            //tell model to ignore player validation for this post 
+            ModelState.Remove("Players");
+
             if (!ModelState.IsValid)
             {
                 //if model state is invalid, repopulate divisions for dropdown and redisplay page
@@ -337,6 +451,108 @@ namespace TermProject.Controllers
             team.RegistrationPaid = vm.RegistrationPaid;
             team.PaymentDate = vm.RegistrationPaid ? (vm.PaymentDate ?? DateTime.Now) : null;
 
+
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+        // MAANGE PLAYERS: ***********************
+
+        [HttpGet]
+        public IActionResult ManagePlayers(int id)
+        {
+            if (!IsAdmin())
+            {
+                //only admins can edit teams
+                return RedirectToAction("Denied", "Auth");
+            }
+
+            // query to get the team with the specfieid ID
+            //get division and player info
+
+            var team = _db.Team
+                .Include(t => t.Division)
+                .Include(t => t.Players)
+                .FirstOrDefault(t => t.TeamId == id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            //map the team info to teamregistervm to populate values in the edit form
+            var vm = new TeamRegisterVm
+            {
+                TeamId = team.TeamId,
+                TeamName = team.TeamName,
+                DivisionId = team.DivisionId,
+                RegistrationPaid = team.RegistrationPaid,
+                PaymentDate = team.PaymentDate,
+
+                //map the players to the playerregisterVM for form
+                Players = team.Players.Select(p => new PlayerRegisterVm
+                {
+                    PlayerName = p.PlayerName,
+                    City = p.City,
+                    Province = p.Province,
+                    Email = p.Email,
+                    Phone = p.Phone
+                }).ToList(),
+
+                //build the divisions dropdown
+                Divisions = _db.Division
+                    .Select(d => new SelectListItem
+                    {
+                        //default selection will be the current division
+                        Value = d.DivisionId.ToString(),
+                        Text = d.DivisionName
+                    })
+                    .ToList()
+            };
+
+            return View(vm);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult ManagePlayers(TeamRegisterVm vm)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Denied", "Auth");
+            }
+
+
+            if (!ModelState.IsValid)
+            {
+                //if model state is invalid, repopulate divisions for dropdown and redisplay page
+                vm.Divisions = _db.Division
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.DivisionId.ToString(),
+                        Text = d.DivisionName
+                    })
+                    .ToList();
+                return View(vm);
+            }
+
+            //get the team from the database in order to update 
+            var team = _db.Team
+                .Include(t => t.Players)
+                .FirstOrDefault(t => t.TeamId == vm.TeamId);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
             //loop through all team players and update their info
             for (int i = 0; i < vm.Players.Count; i++)
             {
@@ -350,6 +566,28 @@ namespace TermProject.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
