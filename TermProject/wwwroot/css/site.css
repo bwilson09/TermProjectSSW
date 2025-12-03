@@ -20,3 +20,27 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.bowling-header{
+    background-image: url(/images/bowling4.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    width: 100%;
+    display: flex;
+
+    position: relative;
+
+}
+
+.team-scroll {
+    display: flex;
+    overflow-x: auto; 
+    gap: 1rem; 
+    padding: 1rem;
+}
+
+    .team-scroll .card {
+        flex: 0 0 auto;
+        width: 250px; 
+    }

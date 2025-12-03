@@ -1,0 +1,39 @@
+﻿@using TermProject.ViewModels
+@model TeamRegisterVm
+
+<h2>Edit a Team</h2>
+
+<div class="card p-3">
+    <form asp-controller="User" asp-action="Edit" method="post">
+        <input type="hidden" asp-for="TeamId" />
+
+        <div class="text-center fs-3">
+            Team Information
+        </div>
+        <div>
+            <label asp-for="TeamName">Team Name</label>
+            <input asp-for="TeamName" class="form-control" />
+            <span class="text-danger" asp-validation-for="TeamName"></span>
+        </div>
+        <div>
+            <label asp-for="DivisionId">Division</label>
+            <select asp-for="DivisionId" asp-items="Model.Divisions" class="form-control">
+                <option value="">--Select your division--</option>
+            </select>
+            <span class="text-danger" asp-validation-for="DivisionId"></span>
+        </div>
+
+
+        <div class="mt-2 fs-3">
+            Mark as Paid
+        </div>
+        <div>
+            <input asp-for="RegistrationPaid" class="form-check-input" type="checkbox" />
+            <label asp-for="RegistrationPaid" class="form-check-label">Paid</label>
+        </div>
+
+        <button type="submit" class="btn btn-secondary me-2">Save Changes</button>
+        <a asp-action="Index" asp-controller="User" class="btn btn-secondary me-2">Cancel</a>
+    </form>
+
+</div>

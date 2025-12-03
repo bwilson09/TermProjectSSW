@@ -1,0 +1,80 @@
+﻿@using TermProject.ViewModels
+@model IEnumerable<TeamVm>
+
+@*header partial to show company name and photo header*@
+@section SiteHeader {
+	@Html.Partial("_SiteHeader")
+}
+
+@if (TempData["Success"] != null)
+{
+	<div class="alert alert-success mt-4">
+		@TempData["Success"]
+	</div>
+}
+
+<div class="mt-5 text-center p-3">
+	<h3>Saint John's Bowling Association is hosting their 50th annual bowling tournament 
+		this December!		
+	</h3>
+
+</div>
+
+
+@*i kinda hate the font tho so maybe change it?*@
+<div class="m-3 text-center p-4">
+	<h4>Join our amazing group of teams and come on out and compete with us!</h4>
+</div>
+
+<div class="mt-2 text-center p-3">
+	@*style link as a button to take us to Register Page*@
+	<a asp-action="Register" class="btn btn-lg btn-info">Register Your Team</a>
+</div>
+
+
+<div class="m-3 p-2 text-center">
+	<h4>See Our Teams</h4>
+</div>
+
+@*Cards here to show off the registered teams
+	Only paid teams will appear- that have 4 members
+	Team Name, Division will be visible
+	link to details page will show player info
+
+*@
+
+@{
+	//adding photos to an array to flip through in the card image section
+	var photos = new[] { "/images/bowling1.jpg", "/images/bowling2.jpg", "/images/bowling3.jpg" };
+	//setting the start index of the array to 0
+	int index = 0;
+
+}
+
+<div class="team-scroll">
+	@*looping through all the teams from the vm*@
+	@foreach(var team in Model)
+	{
+		//setting up the card layout with bootstrap
+		<div class="col-md-3 d-flex align-items-sm-stretch">
+			<div class="card">
+				<!-- referencing the photos array here and setting the photo using modulus the cycle through all 3 images and setting that photo for the card-->
+				<img src="@photos[index % photos.Length]" class="card-img-top h-50" />
+				<div class="card-body">
+					<!--show the team name first and then their division-->
+					<h5 class="card-title text-center">@team.TeamName</h5>
+					<p class="card-text text-center">Division: @team.Division</p>
+					
+					@*link button to take user to see more team details*@
+					<div class="text-center">
+					<a asp-controller="Tournament" asp-action="TeamDetails" asp-route-id="@team.Id" class="btn btn-sm btn-secondary">View Team Details</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		//increasing the index here for the photos to get the next photo and help with the looping through all 3 images
+		index++;
+	}
+</div>
+
+

@@ -1,0 +1,48 @@
+﻿@using TermProject.ViewModels
+@model AdminWrapperVm
+
+<h2>Filtered Teams</h2>
+
+<div class="my-3">
+	<a asp-controller="User" asp-action="Index" class="btn btn-secondary">Back</a>
+
+</div>
+
+@if (Model.Teams.Any()){
+<div>
+	<table class="table table-bordered table-striped align-middle">
+		<thead>
+			<tr>
+				<th>Team ID</th>
+				<th>Team Name</th>
+				<th>Division</th>
+				<th>Paid?</th>
+				<th>Payment Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var t in Model.Teams)
+			{
+				<tr>
+					<td>@t.TeamId</td>
+					<td>@t.TeamName</td>
+					<td>@t.DivisionName</td>
+					<td>@(t.RegistrationPaid ? "Yes" : "No")</td>
+					<td>@(t.RegistrationPaid? t.PaymentDate?.ToString("dd-MMM-yyyy") : "")</td>
+					<td>
+						<a asp-action="Edit" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary">Edit Team</a><br />
+						<a asp-action="ManagePlayers" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary my-1">Manage Players</a><br />
+						<a asp-action="Delete" asp-route-id="@t.TeamId" class="btn btn-sm btn-danger">Delete Team</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	</div>
+}
+else
+{
+	<div class="alert alert-danger fs-2 mt-4">No teams found for selected filters</div>
+}
+
