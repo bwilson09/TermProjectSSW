@@ -9,7 +9,9 @@
 *@
 
 <div class="my-3 d-flex">
-	<a asp-controller="User" asp-action="Add" class="btn btn-secondary">Add New Team</a>
+	<a asp-controller="User" asp-action="Add" class="btn btn-secondary me-2">Add New Team</a>
+	<a asp-controller="User" asp-action="Registration" class="btn btn-secondary me-3">View Registration Summary</a>
+
 	<form method="get" asp-action="Filter" asp-controller="User" class="ms-2">
 		<select name="divisionId" asp-items="Model.Filter.Divisions">
 			<option value="">--All Divisions--</option>
@@ -53,7 +55,6 @@
 					<td>
 						<a asp-action="Edit" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary">Edit Team</a><br />
 						<a asp-action="ManagePlayers" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary my-1">Manage Players</a><br />
-						<a asp-action="Registration" asp-route-id="@t.TeamId" class="btn btn-sm btn-secondary">Registration Summary</a>
 						<a asp-action="Delete" asp-route-id="@t.TeamId" class="btn btn-sm btn-danger">Delete Team</a>
 					</td>
 				</tr>
