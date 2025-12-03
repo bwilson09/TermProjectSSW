@@ -572,25 +572,6 @@ namespace TermProject.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // DELETE TEAMS**********************
 
 
@@ -670,18 +651,6 @@ namespace TermProject.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         // FILTERING TEAMS**********************
 
         [HttpGet]
@@ -738,6 +707,41 @@ namespace TermProject.Controllers
 
 
         }
+
+
+        // REGISTRATION PAGE ************************
+
+        public IActionResult Registration()
+        {
+            var totalTeams = _db.Team.Count();
+            var paidTeams = _db.Team.Count(t => t.RegistrationPaid);
+            var totalFees = paidTeams * 200;
+
+            var vm = new RegistrationVm
+            {
+                TotalTeams = totalTeams,
+                PaidTeams = paidTeams,
+                TotalFeesCollected = totalFees
+            };
+
+            return View(vm);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
     }

@@ -1,0 +1,22 @@
+﻿@model TermProject.ViewModels.RegistrationVm
+
+<h2>Registration Summary</h2>
+
+<ul class="list-group my-4">
+    <li class="list-group-item d-flex justify-content-between">
+        <strong>Total Teams Registered:</strong>
+        <span>@Model.TotalTeams</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+        <strong>Teams Paid:</strong>
+        <span>@Model.PaidTeams</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+        <strong>Total Fees Collected:</strong>
+        <span>$@Model.TotalFeesCollected</span>
+    </li>
+</ul>
+
+<div class="mt-3">
+    <a asp-controller="User" asp-action="Index" class="btn btn-secondary">Back</a>
+</div>
