@@ -42,11 +42,12 @@ namespace TermProject.ViewModels
         public string Province { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
-       //validate email format ?????
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Payment date is required.")]
-        // validate phone number??????
+        [Required(ErrorMessage = "Phone number is required.")]
+        [Phone(ErrorMessage = "Invalid phone number format")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits")]
         public string Phone { get; set; }
 
 
