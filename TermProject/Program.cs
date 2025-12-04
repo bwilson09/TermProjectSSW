@@ -16,13 +16,16 @@ builder.Services.AddDbContext<TournamentDbContext>(options =>
 builder.Services.AddAuthentication("app-cookie")
     .AddCookie("app-cookie", options =>
     {
-        options.LoginPath = "/Auth/Index";
+        options.LoginPath = "/Auth/Login";
         options.LogoutPath = "/Auth/Logout";
         options.AccessDeniedPath = "/Auth/Denied";
     });
 
-builder.Services.AddAuthorization();
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim("IsAdmin", "True"));
+});
 
 
 var app = builder.Build();

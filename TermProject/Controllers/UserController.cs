@@ -7,7 +7,7 @@ using TermProject.ViewModels;
 
 namespace TermProject.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public class UserController : Controller
     {
         private bool IsAdmin()
