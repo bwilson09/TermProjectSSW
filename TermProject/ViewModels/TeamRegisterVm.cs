@@ -52,6 +52,7 @@ namespace TermProject.ViewModels
 
         [Required(ErrorMessage = "Phone Number is required")]
         [Phone(ErrorMessage ="Invalid phone number format")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits")]
         public string Phone { get; set; }
     }
 }
