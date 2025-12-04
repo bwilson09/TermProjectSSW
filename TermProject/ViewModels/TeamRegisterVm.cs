@@ -43,7 +43,7 @@ namespace TermProject.ViewModels
         public string City { get; set; }
 
         [Required(ErrorMessage = "Province is required")]
-        [StringLength(2, MinimumLength =2, ErrorMessage ="Province must be 2 letter code")]
+        //[StringLength(2, MinimumLength =2, ErrorMessage ="Province must be 2 letter code")]
         public string Province { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
