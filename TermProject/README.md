@@ -37,5 +37,5 @@ Notes:
 	TournamentController and Tournament view pages refer to the publicly accessible pages (no login required).
 
 Known Bugs:
-	- If an unauthenticated user tries to navigate to any of the User/____ pages, they are routed to the login page instead of the access denied page.
+	- If an unauthenticated user tries to navigate to any of the User/xxxx pages, they are routed to the login page instead of the access denied page.
 	- No error handling when an unauthenticated user types a nonexistent ID into the URL
