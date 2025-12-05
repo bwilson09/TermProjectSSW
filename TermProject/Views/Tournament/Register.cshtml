@@ -2,14 +2,10 @@
 @model TeamRegisterVm
 
 
-@*use a view model here to only show what the user needs to import for the form?*@
 @section SiteHeader {
 	@Html.Partial("_SiteHeader")
 }
 
-
-
-@* <div asp-validation-summary="All" class="text-danger"></div> *@
 
 <div class="mt-3">
 	<a asp-controller="Tournament" asp-action="Index" class="btn btn-sm btn-secondary">Back to Home</a>
@@ -54,11 +50,7 @@
 				<input asp-for="Players[i].City" class="form-control" />
 				<span asp-validation-for="Players[i].City" class="text-danger"></span>
 			</div>
-			@* <div>
-				<label asp-for="Players[i].Province"></label>
-				<input asp-for="Players[i].Province" class="form-control" maxlength="2" pattern="[A-Z]{2}"/>
-				<span asp-validation-for="Players[i].Province" class="text-danger"></span>
-			</div> *@
+
 			<div class="mb-3">
 				<label class="form-label">Province</label>
 				<select asp-for="Players[i].Province" class="form-select">

@@ -18,7 +18,6 @@ namespace TermProject.Controllers
         private readonly TournamentDbContext _db;
 
         //constructor to recieve injected DbContext
-
         public UserController(TournamentDbContext db)
         {
             _db = db;
@@ -53,11 +52,11 @@ namespace TermProject.Controllers
                     }).ToList(),
 
                     Payments = new List<SelectListItem>
-                {
-                        new SelectListItem { Value = "", Text = "-- All --" },
-                new SelectListItem { Value = "true", Text = "Paid Teams" },
-                new SelectListItem { Value = "false", Text = "Unpaid Teams" }
-                }
+                    {
+                       new SelectListItem { Value = "", Text = "-- All --" },
+                       new SelectListItem { Value = "true", Text = "Paid Teams" },
+                       new SelectListItem { Value = "false", Text = "Unpaid Teams" }
+                    }
                 }
             };
             return View(vm);
@@ -115,7 +114,7 @@ namespace TermProject.Controllers
             {
                 return NotFound();
             }
-            //checking to make sure teamname doesnt already exist
+            //checking to make sure teamname doesnt already exist (case sensitive)
             if (_db.Team.Any(t => t.TeamName.ToLower() == vm.TeamName.ToLower()))
             {
                 ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
@@ -174,7 +173,6 @@ namespace TermProject.Controllers
 
             //send a success message back to the register page for users
             TempData["Success"] = "Team has been added";
-
             return RedirectToAction("Index", "User");
         }
 
@@ -197,9 +195,6 @@ namespace TermProject.Controllers
 
             if (!ModelState.IsValid)
             {
-                //dropdowns ?? come back to this later
-                //vm.DivisionOptions = BuildCategoryOptions();
-                //vm.ProvinceOptions = BuildProvinceOptions();
                 return View(vm);
             }
 
@@ -293,12 +288,7 @@ namespace TermProject.Controllers
             }
 
             //checking to make sure teamname doesnt already exist
-            //if (_db.Team.Any(t => t.TeamName.ToLower() == vm.TeamName.ToLower()))
-            //{
-            //    ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
-            //}
-
-            //wrapped in an if/else so that the team being edited is excluded from the check
+            //using if/else to exclude the teamId being edited from the check
             if (_db.Team.Any(t =>
                 t.TeamId != vm.TeamId &&                
                 t.TeamName.ToLower() == vm.TeamName.ToLower()))
@@ -306,7 +296,8 @@ namespace TermProject.Controllers
                 ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
             }
 
-            //tell model to ignore player validation for this post 
+            //tell model to ignore player validation for this post (this page only edits team details so 
+            //no player info is on the view page)
             ModelState.Remove("Players");
 
             if (!ModelState.IsValid)
@@ -464,7 +455,7 @@ namespace TermProject.Controllers
         // DELETE TEAMS**********************
 
 
-        //view page to display team and player info to confirm user is sure
+        //view page to display team and player info to confirm user wants to delete
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -473,7 +464,7 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
-            //get the team and player values to be deleeted
+            //query to get the team and player values to be deleted
             var team = _db.Team
                 .Include(t => t.Division)
                 .Include(t => t.Players)

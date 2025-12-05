@@ -13,7 +13,6 @@
 
         //navigation property: allows for admin to add players linked to a team
         //in POST action (user controller)
-
         public Team Team { get; set; }
 
         public Player() { }

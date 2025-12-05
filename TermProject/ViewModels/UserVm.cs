@@ -6,20 +6,19 @@ namespace TermProject.ViewModels
 {
     public class UserVm
     {
-        //may not need this one? used teamregisterVm for public and admin
         //team validation
 
         [Required(ErrorMessage = "A team name is required.")]
         [StringLength(50, ErrorMessage = "Team name must be 50 characters or fewer.")]
         public string TeamName { get; set; }
 
-        [Required(ErrorMessage = "Please make a selection.")] //dropdown???????
+        [Required(ErrorMessage = "Please make a selection.")] 
         public string Division { get; set; }
 
-        //not sure if this is required????? not going to validate yet
+
         public decimal RegistrationFee { get; set; }
 
-        //default to false unless admin says otherwise (no validation needed??)
+        //default to false unless admin says otherwise 
         public bool RegistrationPaid { get; set; } = false;
 
 
@@ -38,7 +37,6 @@ namespace TermProject.ViewModels
         public string City { get; set; }
 
         [Required(ErrorMessage = "Please select a province")]
-        //dropdown?????????????
         public string Province { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
@@ -47,11 +45,11 @@ namespace TermProject.ViewModels
 
         [Required(ErrorMessage = "Phone number is required.")]
         [Phone(ErrorMessage = "Invalid phone number format")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be a 10 digit number.")]
         public string Phone { get; set; }
 
 
-        //dropdown options!!!!!!
+        //dropdown options
         [ValidateNever]
         public IEnumerable<SelectListItem> DivisionOptions { get; set; }
 
