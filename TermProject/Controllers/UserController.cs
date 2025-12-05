@@ -7,7 +7,7 @@ using TermProject.ViewModels;
 
 namespace TermProject.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public class UserController : Controller
     {
         private bool IsAdmin()
@@ -18,7 +18,6 @@ namespace TermProject.Controllers
         private readonly TournamentDbContext _db;
 
         //constructor to recieve injected DbContext
-
         public UserController(TournamentDbContext db)
         {
             _db = db;
@@ -53,38 +52,16 @@ namespace TermProject.Controllers
                     }).ToList(),
 
                     Payments = new List<SelectListItem>
-                {
-                        new SelectListItem { Value = "", Text = "-- All --" },
-                new SelectListItem { Value = "true", Text = "Paid Teams" },
-                new SelectListItem { Value = "false", Text = "Unpaid Teams" }
-                }
+                    {
+                       new SelectListItem { Value = "", Text = "-- All --" },
+                       new SelectListItem { Value = "true", Text = "Paid Teams" },
+                       new SelectListItem { Value = "false", Text = "Unpaid Teams" }
+                    }
                 }
             };
             return View(vm);
         }
 
-        //GET index??? do we need an index page for the user controller???
-        //skipping for now but can add later if needed
-        //placeholder
-
-
-        //get data for division and province dropdowns
-        //not sure if we will do the dropdowns this way, commenting out for now
-        //can come back later if needed
-        //private IEnumerable<SelectListItem> BuildCategoryOptions()
-        //{
-        //    var options = new List<SelectListItem>();
-        //    var divisions = _db.Division.ToList();
-
-        //    foreach (var d in divisions)
-        //    {
-        //        options.Add(new SelectListItem
-        //        {
-        //            Value = d.DivisionName,
-        //            Text = d.DivisionName
-        //        });
-        //    }
-        //}
 
 
         // ADD TEAMS**********************
@@ -137,8 +114,8 @@ namespace TermProject.Controllers
             {
                 return NotFound();
             }
-            //checking to make sure teamname doesnt already exist
-            if (_db.Team.Any(t => t.TeamName == vm.TeamName))
+            //checking to make sure teamname doesnt already exist (case sensitive)
+            if (_db.Team.Any(t => t.TeamName.ToLower() == vm.TeamName.ToLower()))
             {
                 ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
             }
@@ -196,7 +173,6 @@ namespace TermProject.Controllers
 
             //send a success message back to the register page for users
             TempData["Success"] = "Team has been added";
-
             return RedirectToAction("Index", "User");
         }
 
@@ -212,11 +188,13 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
+            if (_db.Team.Any(t => t.TeamName.ToLower() == vm.TeamName.ToLower()))
+            {
+                ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
+            }
+
             if (!ModelState.IsValid)
             {
-                //dropdowns ?? come back to this later
-                //vm.DivisionOptions = BuildCategoryOptions();
-                //vm.ProvinceOptions = BuildProvinceOptions();
                 return View(vm);
             }
 
@@ -230,6 +208,7 @@ namespace TermProject.Controllers
 
             _db.Player.Add(player);
             _db.SaveChanges();
+            TempData["Success"] = "Player(s) have been added";
             return RedirectToAction("Index");
         }
 
@@ -243,116 +222,6 @@ namespace TermProject.Controllers
 
         // EDIT TEAMS**********************
 
-        //[HttpGet]
-        //public IActionResult Edit(int id)
-        //{
-        //    if (!IsAdmin())
-        //    {
-        //        //only admins can edit teams
-        //        return RedirectToAction("Denied", "Auth");
-        //    }
-
-        //    // query to get the team with the specfieid ID
-        //    //get division and player info
-
-        //    var team = _db.Team
-        //        .Include(t => t.Division)
-        //        .Include(t => t.Players)
-        //        .FirstOrDefault(t => t.TeamId == id);
-
-        //    if (team == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //map the team info to teamregistervm to populate values in the edit form
-        //    var vm = new TeamRegisterVm
-        //    {
-        //        TeamId = team.TeamId,
-        //        TeamName = team.TeamName,
-        //        DivisionId = team.DivisionId,
-        //        RegistrationPaid = team.RegistrationPaid,
-        //        PaymentDate = team.PaymentDate,
-
-        //        //map the players to the playerregisterVM for form
-        //        Players = team.Players.Select(p => new PlayerRegisterVm
-        //        {
-        //            PlayerName = p.PlayerName,
-        //            City = p.City,
-        //            Province = p.Province,
-        //            Email = p.Email,
-        //            Phone = p.Phone
-        //        }).ToList(),
-
-        //        //build the divisions dropdown
-        //        Divisions = _db.Division
-        //            .Select(d => new SelectListItem
-        //            {
-        //                //default selection will be the current division
-        //                Value = d.DivisionId.ToString(),
-        //                Text = d.DivisionName
-        //            })
-        //            .ToList()
-        //    };
-
-        //    return View(vm);
-        //}
-
-
-
-        //[HttpPost]
-        //public IActionResult Edit(TeamRegisterVm vm)
-        //{
-        //    if (!IsAdmin())
-        //    {
-        //        return RedirectToAction("Denied", "Auth");
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        //if model state is invalid, repopulate divisions for dropdown and redisplay page
-        //        vm.Divisions = _db.Division
-        //            .Select(d => new SelectListItem
-        //            {
-        //                Value = d.DivisionId.ToString(),
-        //                Text = d.DivisionName
-        //            })
-        //            .ToList();
-        //        return View(vm);
-        //    }
-
-        //    //get the team from the database in order to update 
-        //    var team = _db.Team
-        //        .Include(t => t.Players)
-        //        .FirstOrDefault(t => t.TeamId == vm.TeamId);
-
-        //    if (team == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //update the team entity with the edited values
-        //    team.TeamName = vm.TeamName;
-        //    team.DivisionId = (int)vm.DivisionId.Value;
-        //    team.RegistrationPaid = vm.RegistrationPaid;
-        //    team.PaymentDate = vm.RegistrationPaid ? (vm.PaymentDate ?? DateTime.Now) : null;
-
-        //    //loop through all team players and update their info
-        //    for (int i = 0; i < vm.Players.Count; i++)
-        //    {
-        //        team.Players[i].PlayerName = vm.Players[i].PlayerName;
-        //        team.Players[i].City = vm.Players[i].City;
-        //        team.Players[i].Province = vm.Players[i].Province;
-        //        team.Players[i].Email = vm.Players[i].Email;
-        //        team.Players[i].Phone = vm.Players[i].Phone;
-        //    }
-
-        //    _db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-
-
-
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -365,7 +234,6 @@ namespace TermProject.Controllers
 
             // query to get the team with the specfieid ID
             //get division and player info
-
             var team = _db.Team
                 .Include(t => t.Division)
                 .Include(t => t.Players)
@@ -419,7 +287,17 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
-            //tell model to ignore player validation for this post 
+            //checking to make sure teamname doesnt already exist
+            //using if/else to exclude the teamId being edited from the check
+            if (_db.Team.Any(t =>
+                t.TeamId != vm.TeamId &&                
+                t.TeamName.ToLower() == vm.TeamName.ToLower()))
+            {
+                ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
+            }
+
+            //tell model to ignore player validation for this post (this page only edits team details so 
+            //no player info is on the view page)
             ModelState.Remove("Players");
 
             if (!ModelState.IsValid)
@@ -453,6 +331,7 @@ namespace TermProject.Controllers
 
 
             _db.SaveChanges();
+            TempData["Success"] = "Team has been updated.";
             return RedirectToAction("Index");
         }
 
@@ -564,6 +443,7 @@ namespace TermProject.Controllers
             }
 
             _db.SaveChanges();
+            TempData["Success"] = "Player(s) have successfully been updated";
             return RedirectToAction("Index");
         }
 
@@ -575,7 +455,7 @@ namespace TermProject.Controllers
         // DELETE TEAMS**********************
 
 
-        //view page to display team and player info to confirm user is sure
+        //view page to display team and player info to confirm user wants to delete
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -584,7 +464,7 @@ namespace TermProject.Controllers
                 return RedirectToAction("Denied", "Auth");
             }
 
-            //get the team and player values to be deleeted
+            //query to get the team and player values to be deleted
             var team = _db.Team
                 .Include(t => t.Division)
                 .Include(t => t.Players)
@@ -640,6 +520,7 @@ namespace TermProject.Controllers
             //delete the team itself
             _db.Team.Remove(team);
             _db.SaveChanges();
+            TempData["Success"] = "Team has been deleted.";
             return RedirectToAction("Index");
         }
 

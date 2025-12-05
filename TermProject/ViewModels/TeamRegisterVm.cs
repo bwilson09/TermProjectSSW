@@ -43,7 +43,6 @@ namespace TermProject.ViewModels
         public string City { get; set; }
 
         [Required(ErrorMessage = "Province is required")]
-        [StringLength(2, MinimumLength =2, ErrorMessage ="Province must be 2 letter code")]
         public string Province { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -52,6 +51,7 @@ namespace TermProject.ViewModels
 
         [Required(ErrorMessage = "Phone Number is required")]
         [Phone(ErrorMessage ="Invalid phone number format")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be a 10 digit number.")]
         public string Phone { get; set; }
     }
 }

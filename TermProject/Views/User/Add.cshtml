@@ -38,28 +38,24 @@
 				<input asp-for="Players[i].City" class="form-control" />
 				<span asp-validation-for="Players[i].City" class="text-danger"></span>
 			</div>
-			@* <div>
-				<label asp-for="Players[i].Province"></label>
-				<input asp-for="Players[i].Province" class="form-control" maxlength="2" pattern="[A-Z]{2}"/>
-				<span asp-validation-for="Players[i].Province" class="text-danger"></span>
-			</div> *@
+
 			<div class="mb-3">
 				<label class="form-label">Province</label>
 				<select asp-for="Players[i].Province" class="form-select">
 					<option value="">-- Select Province --</option>
-					<option value="AB">Alberta</option>
-					<option value="BC">British Columbia</option>
-					<option value="MB">Manitoba</option>
-					<option value="NB">New Brunswick</option>
-					<option value="NL">Newfoundland and Labrador</option>
-					<option value="NS">Nova Scotia</option>
-					<option value="NT">Northwest Territories</option>
-					<option value="NU">Nunavut</option>
-					<option value="ON">Ontario</option>
-					<option value="PE">Prince Edward Island</option>
-					<option value="QC">Quebec</option>
-					<option value="SK">Saskatchewan</option>
-					<option value="YT">Yukon</option>
+					<option value="AB">AB</option>
+					<option value="BC">BC</option>
+					<option value="MB">MB</option>
+					<option value="NB">NB</option>
+					<option value="NL">NL</option>
+					<option value="NS">NS</option>
+					<option value="NT">NT</option>
+					<option value="NU">NU</option>
+					<option value="ON">ON</option>
+					<option value="PE">PE</option>
+					<option value="QC">QC</option>
+					<option value="SK">SK</option>
+					<option value="YT">YT</option>
 				</select>
 				<span asp-validation-for="Players[i].Province" class="text-danger"></span>
 			</div>

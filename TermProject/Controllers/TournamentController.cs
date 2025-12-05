@@ -125,14 +125,14 @@ namespace TermProject.Controllers
             {
                 return NotFound();
             }
-            //checking to make sure teamname doesnt already exist
-            if (_db.Team.Any(t=>t.TeamName == vm.TeamName))
+            //checking to make sure teamname doesnt already exist (case sensitive)
+            if (_db.Team.Any(t => t.TeamName.ToLower() == vm.TeamName.ToLower()))
             {
                 ModelState.AddModelError("TeamName", "This team name already exists, please try another one");
             }
 
             //checking to make sure 4 player info was provided
-            if(vm.Players == null || vm.Players.Count != 4)
+            if (vm.Players == null || vm.Players.Count != 4)
             {
                 ModelState.AddModelError("Players", "You must register exactly 4 players for your team");
             }
